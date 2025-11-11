@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Dashboard de Productividad</title>
+    <!-- Incluimos Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Usamos la fuente Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        /* Estilos para los tooltips (notas al pasar el mouse) */
+        .tooltip-container {
+            position: relative;
+            display: inline-block;
+            cursor: pointer;
+        }
+
+        .tooltip-text {
+            visibility: hidden;
+            width: 300px;
+            background-color: #333;
+            color: #fff;
+            text-align: left;
+            border-radius: 6px;
+            padding: 10px;
+            position: absolute;
+            z-index: 10;
+            bottom: 125%; /* Posiciona el tooltip encima del elemento */
+            left: 50%;
+            margin-left: -150px; /* Centra el tooltip */
+            opacity: 0;
+            transition: opacity 0.3s;
+            font-size: 0.875rem;
+            font-weight: 400;
+            line-height: 1.4;
+        }
+
+        .tooltip-container:hover .tooltip-text {
+            visibility: visible;
+            opacity: 1;
+        }
+        
+        /* Estilo para los elementos editables */
+        [contenteditable="true"] {
+            transition: all 0.3s ease;
+            padding: 4px;
+            border-radius: 4px;
+        }
+        
+        [contenteditable="true"]:hover {
+            background-color: #f0f4ff; /* Un sutil fondo azul al pasar el mouse */
+        }
+
+        [contenteditable="true"]:focus {
+            outline: 2px solid #4a86ff; /* Un borde azul al editar */
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(74, 134, 255, 0.2);
+        }
+
+        /* Estilos para el textarea */
+        textarea:focus {
+            outline: 2px solid #4a86ff;
+            box-shadow: 0 0 10px rgba(74, 134, 255, 0.2);
+        }
+
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-800 p-4 md:p-8">
+
+    <header class="mb-8">
+        <h1 class="text-4xl font-bold text-gray-900">Dashboard de Productividad</h1>
+        <p class="text-xl text-gray-600">Basado en los principios de "Menos es Más" de la Dra. Ann Song.</p>
+    </header>
+
+    <!-- Contenedor principal del Dashboard -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+        <!-- 1. Mis 5 Objetivos Anuales (Editable) -->
+        <div class="lg:col-span-3 bg-white p-6 rounded-2xl shadow-lg">
+            <div class="flex items-center space-x-2 mb-4">
+                <h2 class="text-2xl font-bold">Mis 5 Objetivos Anuales (Enfoque Radical)</h2>
+                <div class="tooltip-container">
+                    <span class="text-blue-500">ℹ️</span>
+                    <span class="tooltip-text">
+                        <strong>Nota de Productividad:</strong> La Dra. Song limita sus objetivos a solo 5 por año (1-Yo, 1-Pareja, 1-Familia, 2-Profesional). Esto fuerza una honestidad brutal sobre lo que es esencial y elimina el agobio de querer hacerlo todo.
+                    </span>
+                </div>
+            </div>
+
+            <p class="text-sm text-gray-500 mb-4">Haz clic en el texto de cada objetivo para editarlo. Tus cambios se guardarán en este navegador.</p>
+            
+            <ul class="space-y-3 mb-4">
+                <li class="flex items-center space-x-3">
+                    <input type="checkbox" id="check1" class="h-5 w-5 rounded text-blue-600 focus:ring-blue-500">
+                    <span id="obj1" contenteditable="true" class="text-lg w-full">1. (Tu Yo): Autocuidado/Desarrollo Mental y Física</span>
+                </li>
+                <li class="flex items-center space-x-3">
+                    <input type="checkbox" id="check2" class="h-5 w-5 rounded text-blue-600 focus:ring-blue-500">
+                    <span id="obj2" contenteditable="true" class="text-lg w-full">2. (Pareja/Hijos): ...</span>
+                </li>
+                <li class="flex items-center space-x-3">
+                    <input type="checkbox" id="check3" class="h-5 w-5 rounded text-blue-600 focus:ring-blue-500">
+                    <span id="obj3" contenteditable="true" class="text-lg w-full">3. (Familia/Relaciones): ...</span>
+                </li>
+                <li class="flex items-center space-x-3">
+                    <input type="checkbox" id="check4" class="h-5 w-5 rounded text-blue-600 focus:ring-blue-500">
+                    <span id="obj4" contenteditable="true" class="text-lg w-full">4. (Profesional #1): ...</span>
+                </li>
+                <li class="flex items-center space-x-3">
+                    <input type="checkbox" id="check5" class="h-5 w-5 rounded text-blue-600 focus:ring-blue-500">
+                    <span id="obj5" contenteditable="true" class="text-lg w-full">5. (Profesional #2): ...</span>
+                </li>
+            </ul>
+
+            <!-- Barra de Progreso Dinámica -->
+            <div class="w-full bg-gray-200 rounded-full h-2.5">
+                <div id="progress-bar" class="bg-blue-600 h-2.5 rounded-full transition-all duration-500" style="width: 0%"></div>
+            </div>
+            <p id="progress-text" class="text-right text-sm text-gray-600 mt-1">0 de 5 completados</p>
+        </div>
+
+        <!-- 2. El Orden de Operaciones -->
+        <div class="lg:col-span-1 bg-white p-6 rounded-2xl shadow-lg">
+             <div class="flex items-center space-x-2 mb-4">
+                <h2 class="text-2xl font-bold">El Orden</h2>
+                <div class="tooltip-container">
+                    <span class="text-blue-500">ℹ️</span>
+                    <span class="tooltip-text">
+                        <strong>Nota de Productividad:</strong> Este es el pilar central. ¡El orden importa! No tiene sentido delegar o automatizar una tarea que debería ser eliminada. Primero elimina, luego optimiza lo que queda.
+                    </span>
+                </div>
+            </div>
+            <ol class="relative border-l border-gray-200">
+                <li class="mb-10 ml-6">            
+                    <span class="absolute flex items-center justify-center w-8 h-8 bg-red-100 rounded-full -left-4 ring-8 ring-white">
+                        <span class="text-lg">❌</span>
+                    </span>
+                    <h3 class="text-xl font-semibold text-red-700">1. Eliminar</h3>
+                    <p class="text-base font-normal text-gray-600">¿Es esto realmente necesario? ¿Qué pasa si no lo hago? Di "no" a todo lo que no esté alineado con tus 5 objetivos.</p>
+                </li>
+                <li class="mb-10 ml-6">
+                    <span class="absolute flex items-center justify-center w-8 h-8 bg-blue-100 rounded-full -left-4 ring-8 ring-white">
+                        <span class="text-lg">🤖</span>
+                    </span>
+                    <h3 class="text-xl font-semibold text-blue-700">2. Automatizar</h3>
+                    <p class="text-base font-normal text-gray-600">Si debe hacerse y es repetitivo, ¿puede un sistema o software hacerlo por mí? (Ej: pagos, emails).</p>
+                </li>
+                <li class="ml-6">
+                    <span class="absolute flex items-center justify-center w-8 h-8 bg-green-100 rounded-full -left-4 ring-8 ring-white">
+                        <span class="text-lg">➡️</span>
+                    </span>
+                    <h3 class="text-xl font-semibold text-green-700">3. Delegar</h3>
+                    <p class="text-base font-normal text-gray-600">Si debe hacerse, pero no requiere mi habilidad única, ¿puede hacerlo alguien más? (Asistente virtual, gestor del hogar).</p>
+                </li>
+            </ol>
+        </div>
+
+        <!-- 3. Matriz de Eisenhower (Gráfico) -->
+        <div class="lg:col-span-2 bg-white p-6 rounded-2xl shadow-lg">
+            <div class="flex items-center space-x-2 mb-4">
+                <h2 class="text-2xl font-bold">Matriz de Eliminación (Eisenhower)</h2>
+                 <div class="tooltip-container">
+                    <span class="text-blue-500">ℹ️</span>
+                    <span class="tooltip-text">
+                        <strong>Nota de Productividad:</strong> Usa esto para clasificar CUALQUIER tarea que llegue a ti. El objetivo es vivir en el cuadrante "Planificar". La Dra. Song elimina activamente el cuadrante rojo.
+                    </span>
+                </div>
+            </div>
+            
+            <div class="grid grid-cols-2 grid-rows-2 gap-4 h-full min-h-[300px]">
+                <div class="bg-green-100 p-4 rounded-lg border-2 border-green-300 flex flex-col">
+                    <h3 class="font-bold text-lg text-green-800">HACER (Urgente + Importante)</h3>
+                    <p class="text-sm text-green-700 mb-2">Crisis, emergencias, deadlines reales. Hazlo ya.</p>
+                    <textarea id="matrix-do" class="w-full h-full flex-grow p-2 rounded border border-green-300 bg-white bg-opacity-50 text-sm" rows="3"></textarea>
+                </div>
+                <div class="bg-blue-100 p-4 rounded-lg border-2 border-blue-300 ring-4 ring-blue-500 shadow-xl flex flex-col">
+                    <h3 class="font-bold text-lg text-blue-800">PLANIFICAR (No Urgente + Importante)</h3>
+                    <p class="text-sm text-blue-700 mb-2"><strong>¡VIVE AQUÍ!</strong> Metas, relaciones, salud, 'deep work'. Agéndalo.</p>
+                    <textarea id="matrix-plan" class="w-full h-full flex-grow p-2 rounded border border-blue-300 bg-white bg-opacity-50 text-sm" rows="3"></textarea>
+                </div>
+                <div class="bg-orange-100 p-4 rounded-lg border-2 border-orange-300 flex flex-col">
+                    <h3 class="font-bold text-lg text-orange-800">DELEGAR (Urgente + No Importante)</h3>
+                    <p class="text-sm text-orange-700 mb-2">Interrupciones, llamadas, correos que no te competen. Delega o minimiza.</p>
+                    <textarea id="matrix-delegate" class="w-full h-full flex-grow p-2 rounded border border-orange-300 bg-white bg-opacity-50 text-sm" rows="3"></textarea>
+                </div>
+                <div class="bg-red-100 p-4 rounded-lg border-2 border-red-300 flex flex-col">
+                    <h3 class="font-bold text-lg text-red-800">ELIMINAR (No Urgente + No Importante)</h3>
+                    <p class="text-sm text-red-700 mb-2">Distracciones, redes sociales sin propósito, 'scroll' infinito. ¡Bórralo!</p>
+                    <textarea id="matrix-eliminate" class="w-full h-full flex-grow p-2 rounded border border-red-300 bg-white bg-opacity-50 text-sm" rows="3"></textarea>
+                </div>
+            </div>
+        </div>
+
+        <!-- 4. Bloques Temáticos (Editable) -->
+        <div class="lg:col-span-1 bg-white p-6 rounded-2xl shadow-lg">
+            <div class="flex items-center space-x-2 mb-4">
+                <h2 class="text-2xl font-bold">Bloques Temáticos Diarios</h2>
+                 <div class="tooltip-container">
+                    <span class="text-blue-500">ℹ️</span>
+                    <span class="tooltip-text">
+                        <strong>Nota de Productividad:</strong> Agrupar tareas similares (Bloques Temáticos) evita el "task switching" (cambiar de tarea), que nos cuesta 20 min de enfoque cada vez. Define tus bloques ideales.
+                    </span>
+                </div>
+            </div>
+            <p class="text-sm text-gray-500 mb-4">Haz clic y edita tu día ideal. Se guardará.</p>
+            <div class="space-y-4">
+                <div>
+                    <label for="bloque-manana" class="block text-sm font-medium text-blue-700">Mañana (Ej: Deep Work, Creativo)</label>
+                    <textarea id="bloque-manana" rows="3" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2"></textarea>
+                </div>
+                <div>
+                    <label for="bloque-mediodia" class="block text-sm font-medium text-green-700">Mediodía (Ej: Servir a otros, Reuniones)</label>
+                    <textarea id="bloque-mediodia" rows="3" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2"></textarea>
+                </div>
+                <div>
+                    <label for="bloque-tarde" class="block text-sm font-medium text-purple-700">Tarde (Ej: Familia, Personal)</label>
+                    <textarea id="bloque-tarde" rows="3" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2"></textarea>
+                </div>
+                <div>
+                    <label for="bloque-noche" class="block text-sm font-medium text-gray-700">Noche (Ej: Reflexión, Planificar mañana)</label>
+                    <textarea id="bloque-noche" rows="3" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2"></textarea>
+                </div>
+            </div>
+        </div>
+
+        <!-- 5. Sostenibilidad (Editable) -->
+        <div class="lg:col-span-2 bg-white p-6 rounded-2xl shadow-lg">
+             <div class="flex items-center space-x-2 mb-4">
+                <h2 class="text-2xl font-bold">Sostenibilidad y "Mi Porqué"</h2>
+                 <div class="tooltip-container">
+                    <span class="text-blue-500">ℹ️</span>
+                    <span class="tooltip-text">
+                        <strong>Nota de Productividad:</strong> Este es el combustible. Sin un "porqué" claro (visión a 50 años) y sin una recuperación activa (autocuidado no negociable), cualquier sistema se quema. Esto es lo que lo hace sostenible.
+                    </span>
+                </div>
+            </div>
+            <div class="space-y-4">
+                <div>
+                    <label for="mi-porque" class="block text-lg font-medium text-gray-700">Mi "Porqué" (Mi visión a largo plazo que me motiva)</label>
+                    <p class="text-sm text-gray-500 mb-2">¿Qué quiero construir? ¿Cómo quiero vivir? (Ejercicio de 50 años)</p>
+                    <textarea id="mi-porque" rows="4" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2"></textarea>
+                </div>
+                 <div>
+                    <label for="recuperacion" class="block text-lg font-medium text-gray-700">Recuperación Activa (Mis "No Negociables")</label>
+                    <p class="text-sm text-gray-500 mb-2">Actividades que agendo PRIMERO para recargar energía (Ej: ejercicio, citas, meditación, tanques de flotación).</p>
+                    <textarea id="recuperacion" rows="4" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2"></textarea>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            
+            // --- IDs de todos los elementos editables ---
+            const editableElements = {
+                // Objetivos
+                'obj1': '1. (Tu Yo): Autocuidado/Desarrollo Mental y Física',
+                'obj2': '2. (Pareja/Hijos): ...',
+                'obj3': '3. (Familia/Relaciones): ...',
+                'obj4': '4. (Profesional #1): ...',
+                'obj5': '5. (Profesional #2): ...',
+                // Matriz de Eisenhower (NUEVO)
+                'matrix-do': 'Ej: Crisis de trabajo, Deadline urgente...',
+                'matrix-plan': 'Ej: Planificar proyecto, Hacer ejercicio, Tiempo con familia...',
+                'matrix-delegate': 'Ej: Responder emails de rutina, Agendar reuniones...',
+                'matrix-eliminate': 'Ej: Revisar redes sociales sin motivo, Noticias...',
+                // Bloques
+                'bloque-manana': 'Ej: Tarea más difícil del día, trabajo creativo, ejercicio.',
+                'bloque-mediodia': 'Ej: Responder emails, reuniones, llamadas.',
+                'bloque-tarde': 'Ej: Tiempo de familia, errands, hobbies.',
+                'bloque-noche': 'Ej: Leer, planificar las 3 tareas de mañana, relajarse.',
+                // Sostenibilidad
+                'mi-porque': 'Escribe aquí tu visión...',
+                'recuperacion': 'Ej: Gimnasio (L, M, V), Noche de cita (Sábado), Meditar (Diario)...'
+            };
+
+            const checkboxElements = ['check1', 'check2', 'check3', 'check4', 'check5'];
+            
+            // --- Cargar Datos de localStorage ---
+            function loadData() {
+                // Cargar elementos de texto (objetivos y textareas)
+                for (const id in editableElements) {
+                    const element = document.getElementById(id);
+                    const savedValue = localStorage.getItem(id);
+                    const defaultValue = editableElements[id];
+
+                    if (element.tagName === 'TEXTAREA') {
+                        element.value = savedValue || defaultValue;
+                    } else if (element.tagName === 'SPAN') {
+                        element.innerText = savedValue || defaultValue;
+                    }
+                }
+                
+                // Cargar checkboxes
+                checkboxElements.forEach(id => {
+                    const element = document.getElementById(id);
+                    const savedValue = localStorage.getItem(id) === 'true';
+                    element.checked = savedValue;
+                });
+
+                updateProgress();
+            }
+
+            // --- Guardar Datos en localStorage ---
+            function saveData(id, value) {
+                localStorage.setItem(id, value);
+            }
+
+            // --- Actualizar Barra de Progreso ---
+            function updateProgress() {
+                const progressBar = document.getElementById('progress-bar');
+                const progressText = document.getElementById('progress-text');
+                
+                let checkedCount = 0;
+                checkboxElements.forEach(id => {
+                    if (document.getElementById(id).checked) {
+                        checkedCount++;
+                    }
+                });
+
+                const progressPercentage = (checkedCount / checkboxElements.length) * 100;
+                
+                progressBar.style.width = `${progressPercentage}%`;
+                progressText.innerText = `${checkedCount} de ${checkboxElements.length} completados`;
+            }
+
+            // --- Añadir Event Listeners para Guardar ---
+            
+            // Para Objetivos (contenteditable spans)
+            document.querySelectorAll('span[contenteditable="true"]').forEach(span => {
+                const id = span.id;
+                span.addEventListener('input', () => {
+                    saveData(id, span.innerText);
+                });
+            });
+
+            // Para Bloques y Sostenibilidad (textareas)
+            document.querySelectorAll('textarea').forEach(textarea => {
+                const id = textarea.id;
+                textarea.addEventListener('input', () => {
+                    saveData(id, textarea.value);
+                });
+            });
+
+            // Para Checkboxes
+            checkboxElements.forEach(id => {
+                const checkbox = document.getElementById(id);
+                checkbox.addEventListener('change', () => {
+                    saveData(id, checkbox.checked);
+                    updateProgress(); // Actualiza el progreso al cambiar un checkbox
+                });
+            });
+
+            // --- Carga inicial ---
+            loadData();
+        });
+    </script>
+
+</body>
+</html>
